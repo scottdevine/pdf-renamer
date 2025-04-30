@@ -23,8 +23,8 @@ OPTIONS = {
         'CFBundleName': 'PDF Renamer',
         'CFBundleDisplayName': 'PDF Renamer',
         'CFBundleIdentifier': 'com.scottdevine.pdfrenamer',
-        'CFBundleVersion': '1.1.0',
-        'CFBundleShortVersionString': '1.1.0',
+        'CFBundleVersion': '1.1.1',
+        'CFBundleShortVersionString': '1.1.1',
         'NSHumanReadableCopyright': 'Copyright © 2023 Scott Devine',
         'CFBundleDocumentTypes': [
             {
