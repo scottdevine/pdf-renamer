@@ -22,6 +22,7 @@ The latest stable version of ```pdf-renamer``` is the **1.1**. See [here](https:
  - [Usage](#usage)
    - [Command Line Interface](#usage)
    - [Graphical User Interface](#graphical-user-interface)
+     - [macOS Application](#macos-application)
  - [Installing the shortcuts in the right-click context menu of Windows](#installing-the-shortcuts-in-the-right-click-context-menu-of-windows)
  - [Contributing](#contributing)
  - [License](#license)
@@ -155,6 +156,25 @@ The GUI makes it easy to:
 3. Set processing options
 4. Monitor the renaming process with real-time logs
 5. Track progress with a progress bar
+
+### macOS Application
+
+For macOS users, you can create a standalone application that can be added to your Dock for easy access:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/scottdevine/pdf-renamer.git
+   cd pdf-renamer
+   ```
+
+2. Run the provided script to create the application:
+   ```bash
+   ./create_app.sh
+   ```
+
+3. The application will be created in the `dist` folder. You can drag it to your Applications folder or Dock.
+
+For more detailed instructions, see the [macOS Application Guide](macos_app_readme.md).
 
 
 ## Contributing
