@@ -2,13 +2,13 @@
 pdf-renamer is a Python command-line tool to automatically rename the pdf files of a scientific paper, or in general any publication which can be associated to a [DOI](http://dx.doi.org) or
 other identifiers (e.g. [arXiv](https://arxiv.org)). It can be used to rename single files or to scan entire folders and sub-folders.
 The format of the filename can be specified by the user by choosing among several tags. Besides command-line operation, it can also be used as a library
-from your Python project. 
+from your Python project.
 
 [![Downloads](https://pepy.tech/badge/pdf-renamer)](https://pepy.tech/project/pdf-renamer)[![Downloads](https://pepy.tech/badge/pdf-renamer/month)](https://pepy.tech/project/pdf-renamer)
 [![Pip Package](https://img.shields.io/pypi/v/pdf-renamer?logo=PyPI)](https://pypi.org/project/pdf-renamer?versions=1.0?versions=1.1)
 
 ## Warning
-```pdf-renamer``` uses ```pdf2doi``` to find the DOI of a paper. Versions of ```pdf2doi``` prior to the **1.6** are affected by a very annoying bug. By default, after finding the DOI of a pdf paper, ```pdf2doi``` will store the DOI into the metadata of the pdf file. Due to a bug, the size of the pdf file doubles everytime that a metadata was added. This bug has been fixed in all versions of ```pdf2doi``` >= 1.6. 
+```pdf-renamer``` uses ```pdf2doi``` to find the DOI of a paper. Versions of ```pdf2doi``` prior to the **1.6** are affected by a very annoying bug. By default, after finding the DOI of a pdf paper, ```pdf2doi``` will store the DOI into the metadata of the pdf file. Due to a bug, the size of the pdf file doubles everytime that a metadata was added. This bug has been fixed in all versions of ```pdf2doi``` >= 1.6.
 
 If you have pdf files that have been affected by this bug, you can use ```pdf2doi``` to fix it. After updating ```pdf2doi``` to a version >= 1.6, run ```pdf2doi path/to/folder/containing/pdf/files -id ''```. This will restore the pdf files to their original size.
 
@@ -20,8 +20,10 @@ The latest stable version of ```pdf-renamer``` is the **1.1**. See [here](https:
  - [Description](#description)
  - [Installation](#installation)
  - [Usage](#usage)
+   - [Command Line Interface](#usage)
+   - [Graphical User Interface](#graphical-user-interface)
  - [Installing the shortcuts in the right-click context menu of Windows](#installing-the-shortcuts-in-the-right-click-context-menu-of-windows)
-  - [Contributing](#contributing)
+ - [Contributing](#contributing)
  - [License](#license)
 
 ## Installation
@@ -30,16 +32,16 @@ Use the package manager pip to install ```pdf-renamer```.
 ```bash
 pip install pdf-renamer==1.1
 ```
-This will install ```pdf-renamer``` as  Python package, but also as a stand-alone executable script. 
-The executable will be installed in a directory whose path depends on your Python installation and operating system. 
-Make sure that this directory is added to the ```PATH``` variable of your operating system (for standard Python installations under Windows this should be already the case). 
-You can check how to add the folder to the ```PATH``` variable for [Windows](https://www.google.com/search?q=python+add+script+folder+to+path+windows), 
+This will install ```pdf-renamer``` as  Python package, but also as a stand-alone executable script.
+The executable will be installed in a directory whose path depends on your Python installation and operating system.
+Make sure that this directory is added to the ```PATH``` variable of your operating system (for standard Python installations under Windows this should be already the case).
+You can check how to add the folder to the ```PATH``` variable for [Windows](https://www.google.com/search?q=python+add+script+folder+to+path+windows),
 [Mac](https://www.google.com/search?q=python+add+script+folder+to+path+mac) and [Linux](https://www.google.com/search?q=python+add+script+folder+to+path+linux).
 
 Under Windows, it is also possible to add [shortcuts to the right-click context menu](#installing-the-shortcuts-in-the-right-click-context-menu-of-windows).
 
 ## Description
-```pdf-renamer``` uses the libraries [pdf2doi](https://github.com/MicheleCotrufo/pdf2doi) and [pdf2bib](https://github.com/MicheleCotrufo/pdf2bib) to extract 
+```pdf-renamer``` uses the libraries [pdf2doi](https://github.com/MicheleCotrufo/pdf2doi) and [pdf2bib](https://github.com/MicheleCotrufo/pdf2bib) to extract
 bibliographic data of a paper starting from a .pdf file. The retrieved data can then be used to automatically rename pdf files with a custom format (e.g. 'Year - Journal - Authors - Title').
 
 ## Usage
@@ -50,7 +52,7 @@ The simplest command-line invokation is
 ```
 $ pdfrenamer 'path/to/target'
 ```
-where ```target``` is either a valid pdf file or a directory containing pdf files. ```pdf-renamer``` will automatically rename the file(s) in ```path/to/target``` 
+where ```target``` is either a valid pdf file or a directory containing pdf files. ```pdf-renamer``` will automatically rename the file(s) in ```path/to/target```
 (assuming that they are valid publications for which a DOI/arXiv ID can be found), by using the standard settings.
 
 A list of the standard settings, and additional commands, can be obtained by typing ```pdfrenamer --h```
@@ -129,6 +131,30 @@ $ pdfrenamer 'path/to/target' -f "{YYYY} - {Aetal} - {J} - {T}" -max_length_auth
 ```
 In this case the new values are saved in a settings.ini file inside the ```pdf-renamer``` folder (as can be checked by typing ```pdfrenamer --h``` again).
 
+## Graphical User Interface
+
+pdf-renamer also provides a graphical user interface (GUI) for easier use. You can launch the GUI by running:
+
+```
+$ pdfrenamer-gui
+```
+
+The GUI provides the following features:
+- Source folder selection
+- Output folder selection (can be different from source)
+- Filename format configuration
+- Options for recursive processing, force rename, and read-only mode
+- Progress tracking
+- Detailed logging
+
+![PDF Renamer GUI](https://raw.githubusercontent.com/MicheleCotrufo/pdf-renamer/master/docs/pdf_renamer_gui.png)
+
+The GUI makes it easy to:
+1. Select source and destination folders
+2. Configure the filename format
+3. Set processing options
+4. Monitor the renaming process with real-time logs
+5. Track progress with a progress bar
 
 
 ## Contributing

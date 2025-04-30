@@ -1,4 +1,4 @@
-''' 
+'''
 This module contains several functions and variables that are used to generate
 a valid filename, based on the chosen format and the available infos
 '''
@@ -72,11 +72,11 @@ def is_valid_integer(string,number_digits):
     return (string.isnumeric() and len(string)==number_digits)
 
 def sanitize(string):
-    #Given a string in input, it first removes all possible latex codes, and then removes any residual character which would not be 
+    #Given a string in input, it first removes all possible latex codes, and then removes any residual character which would not be
     #allowed in a file name
 
     #Step 1. Replace common latex symbols
-    replace ={       
+    replace ={
                 '-'  : ['{\\textendash}','{\\textemdash}'] ,
                 '_'  : ['{\\textunderscore}'],
                 ' '  : ["{\\textasteriskcentered}","{\\textgreater}","{\\textless}"],
@@ -92,16 +92,16 @@ def sanitize(string):
 
     #Step 2. Find all substrings in the format {\string1{string2}} (e.g. {\`{u}}) and replace them by string2
     #We use the function remove_latex_codes defined in the pdf2bib package
-    string = pdf2bib.remove_latex_codes(string)   
+    string = pdf2bib.remove_latex_codes(string)
 
     #Step 3. #Check that the string is only made out of ascii characters (i.e. no accents, tildes, etc.)
-    string = unidecode.unidecode(string) 
-    
+    string = unidecode.unidecode(string)
+
     #Step 4. Remove any residual special character
-    invalid = "<>\"/\|*{}'?:"
+    invalid = "<>\"/\\|*{}'?:"
     for char in invalid:
         string = string.replace(char, '')
-        
+
     #Step 5. If there are multiple spaces, replace them with only one
     string = re.sub(' +',' ',string)
 
@@ -136,10 +136,10 @@ def find_abbreviation_journal(journal_name):
     return None
 
 def find_tags_in_format(format):
-    #Given the input string 'format', it creates a list of all the tags "{str}" 
+    #Given the input string 'format', it creates a list of all the tags "{str}"
     #contained in it, by looking for stuff wrapped between { and }
     # Example, tags = ['{YYYY}', '{MM}', '{J}', '{A}', '{T}']
-    tags = re.findall(r'\{.*?\}', format)       
+    tags = re.findall(r'\{.*?\}', format)
     return tags
 
 def check_format_is_valid(format):
@@ -162,9 +162,9 @@ def check_format_is_valid(format):
 
 def build_filename(infos,   format = None, tags=None):
     '''
-    It generates a filename based on the metadata contained in the input dictionary 'infos', using the format specified 
-    in the input string 'format'. The tags contained in format have been already identified, and passed to this function 
-    in the input dictionary 'tags'. 
+    It generates a filename based on the metadata contained in the input dictionary 'infos', using the format specified
+    in the input string 'format'. The tags contained in format have been already identified, and passed to this function
+    in the input dictionary 'tags'.
     '''
     if not format: format = config.get('format')
     rep_dict =  dict.fromkeys(tags) #Initialize a dictionary with keys equal to the elements of the list tags, and all the values set to None
@@ -175,7 +175,7 @@ def build_filename(infos,   format = None, tags=None):
 
     #Now we look in the keys of the 'rep_dict' dictionary and populate the values of the dictionary
     #by using the information contained in the 'infos' dictionary
-   
+
     if '{YYYY}' in rep_dict.keys():
         rep_dict['{YYYY}'] = infos['year'] if ('year' in infos and is_valid_integer(infos['year'],4)) else '0000'
 
@@ -217,7 +217,7 @@ def build_filename(infos,   format = None, tags=None):
         author_info = infos['author']
     if 'authors' in infos.keys() and len(infos['authors'])>len(author_info):
         author_info = infos['authors']
-    
+
     ListAuthorTags = ['{Aall}','{A3etal}','{Aetal}','{aAall}','{aA3etal}','{aAetal}']
     if any(item in rep_dict.keys() for item in ListAuthorTags): #Chec if any of the tag chosen by the user is one of the author tags defined in ListAuthorTags
         if author_info:
@@ -230,19 +230,19 @@ def build_filename(infos,   format = None, tags=None):
             elif isinstance(author_info,str):
                 authors = [author.strip() for author in author_info.split(" and ")]
                 lastnames = [name.split()[-1] for name in authors]
-                firstnames = [name.split()[:-1] if len(name.split())>1 else [''] for name in authors]   # The check on len(name.split())>1 is necessary to address the case in which                                                                                     #  the string name contains only one words (e.g. only the last name of the author is available)    
-            
-            if lastnames:                                                                                        
+                firstnames = [name.split()[:-1] if len(name.split())>1 else [''] for name in authors]   # The check on len(name.split())>1 is necessary to address the case in which                                                                                     #  the string name contains only one words (e.g. only the last name of the author is available)
+
+            if lastnames:
                 rep_dict['{Aall}'] = ", ".join(lastnames)
                 rep_dict['{A3etal}'] = ", ".join(lastnames[0:3])
                 if len(lastnames)>3:
                     rep_dict['{A3etal}'] = rep_dict['{A3etal}'] + " et al."
                 rep_dict['{Aetal}'] = lastnames[0] + (" et al." if len(lastnames)>1 else "")
 
-                if firstnames: 
+                if firstnames:
                     firstinitials = [firstname[0][0].upper()+"."  if len(firstname[0])>0 else "" for firstname in firstnames]
                     firstinitial_lastnames = [firstinitials + " " + lastname for (firstinitials,lastname) in zip(firstinitials,lastnames) ]
-  
+
                     rep_dict['{aAall}'] = ", ".join(firstinitial_lastnames)
                     rep_dict['{aA3etal}'] = ", ".join(firstinitial_lastnames[0:3])
                     if len(firstinitial_lastnames)>3:
@@ -290,7 +290,7 @@ def build_filename(infos,   format = None, tags=None):
     #        rep_dict['{Tsnake}'] = to_snake(infos['title'])
     #    else:
     #        rep_dict['{Tsnake}'] = '[NoTitle]'
-    
+
     #if '{Tkebab}' in rep_dict.keys():
     #    if ('title' in infos) and infos['title']:
     #        rep_dict['{Tkebab}'] = to_kebab(infos['title'])
@@ -308,6 +308,6 @@ def build_filename(infos,   format = None, tags=None):
 
     filename = sanitize(format)
 
-    #Check that the filename string is not longer than max_length_filename, and truncate it in case. 
+    #Check that the filename string is not longer than max_length_filename, and truncate it in case.
     filename = filename[0:config.get('max_length_filename')]
     return filename
