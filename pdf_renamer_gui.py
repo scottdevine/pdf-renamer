@@ -7,6 +7,7 @@ Provides an easy-to-use alternative to the command-line interface.
 """
 
 import os
+import shutil
 import tkinter as tk
 from tkinter import ttk, filedialog, scrolledtext
 import threading
@@ -328,6 +329,8 @@ class PDFRenamerGUI:
                 source = source + os.path.sep
 
             # Call the rename function from the pdf-renamer library
+            # Note: The core rename function doesn't support moving files to a different directory,
+            # so we'll handle that separately after the renaming is done
             results = rename(target=source, format=format_str)
 
             # Remove our custom handler
@@ -354,9 +357,29 @@ class PDFRenamerGUI:
                             filename = os.path.basename(result['path_new'])
                             new_dest_path = os.path.join(dest, filename)
 
+                            # Make sure destination directory exists
+                            if not os.path.exists(dest):
+                                try:
+                                    os.makedirs(dest)
+                                    self.queue.put(("log", f"Created destination directory: {dest}"))
+                                except Exception as e:
+                                    self.queue.put(("log", f"Error creating destination directory: {str(e)}"))
+                                    continue
+
+                            # Check if a file with the same name already exists in the destination
+                            if os.path.exists(new_dest_path):
+                                base, ext = os.path.splitext(new_dest_path)
+                                counter = 1
+                                while os.path.exists(f"{base} ({counter}){ext}"):
+                                    counter += 1
+                                new_dest_path = f"{base} ({counter}){ext}"
+                                self.queue.put(("log", f"File already exists in destination, using: {os.path.basename(new_dest_path)}"))
+
                             # Move the file to the destination folder
                             try:
-                                os.rename(result['path_new'], new_dest_path)
+                                # Copy file to destination, then remove original
+                                shutil.copy2(result['path_new'], new_dest_path)
+                                os.remove(result['path_new'])
                                 self.queue.put(("log", f"Moved to: {new_dest_path}"))
                                 result['path_new'] = new_dest_path
                             except Exception as e:
