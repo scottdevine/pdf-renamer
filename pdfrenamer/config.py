@@ -6,7 +6,7 @@ import logging
 class config():
     #Default values for all parameters. If the file settings.ini is absent, these values are used
     __params={'verbose'   :   True,
-            'format' : "{YYYY} - {Jabbr} - {A3etal} - {T}",
+            'format' : "{Aetal} - {YYYY} - {Jabbr} - {T}",
             'max_length_authors' : 80,
             'max_length_filename' : 250,
             'max_words_title' : 5,

@@ -76,7 +76,7 @@ options:
   -s, --decrease_verbose
                         Decrease verbosity. By default (i.e. when not using -s), all steps performed by pdf-renamer, pdf2dbib and pdf2doi are documented.
   -ro, --readonly       By default, pdf-renamer and pdf2doi store some information into the metadata of the pdf file in order to speed up subsequent processing. By using this additional option, no metadata is ever added.
-  -f FORMAT             Format of the new filename. Default = "{YYYY} - {Jabbr} - {A3etal} - {T}".
+  -f FORMAT             Format of the new filename. Default = "{Aetal} - {YYYY} - {Jabbr} - {T}".
                         Valid tags:
                         {YYYY}          =        Year of publication
                         {MM}            =        Month of publication (in digits)
