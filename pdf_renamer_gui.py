@@ -31,12 +31,29 @@ class PDFRenamerGUI:
 
         # Create a custom style for the action button
         self.style.configure("Action.TButton",
-                            padding=8,
-                            font=('Helvetica', 10, 'bold'))
+                            padding=10,
+                            font=('Helvetica', 12, 'bold'))
 
         # Create main frame
         self.main_frame = ttk.Frame(self.root, padding="10")
         self.main_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Create top frame for input controls
+        top_frame = ttk.Frame(self.main_frame)
+        top_frame.pack(fill=tk.X, side=tk.TOP, pady=5)
+
+        # Create bottom frame for buttons
+        bottom_frame = ttk.Frame(self.main_frame)
+        bottom_frame.pack(fill=tk.X, side=tk.BOTTOM, pady=5)
+
+        # Create middle frame for log and progress
+        middle_frame = ttk.Frame(self.main_frame)
+        middle_frame.pack(fill=tk.BOTH, expand=True, pady=5)
+
+        # Store frames for later use
+        self.top_frame = top_frame
+        self.middle_frame = middle_frame
+        self.bottom_frame = bottom_frame
 
         # Create and place widgets
         self._create_source_selection()
@@ -60,7 +77,7 @@ class PDFRenamerGUI:
 
     def _create_source_selection(self):
         """Create source folder selection components"""
-        source_frame = ttk.Frame(self.main_frame)
+        source_frame = ttk.Frame(self.top_frame)
         source_frame.pack(fill=tk.X, pady=5)
 
         source_label = ttk.Label(source_frame, text="Source Folder:")
@@ -79,7 +96,7 @@ class PDFRenamerGUI:
 
     def _create_dest_selection(self):
         """Create destination folder selection components"""
-        dest_frame = ttk.Frame(self.main_frame)
+        dest_frame = ttk.Frame(self.top_frame)
         dest_frame.pack(fill=tk.X, pady=5)
 
         dest_label = ttk.Label(dest_frame, text="Output Folder:")
@@ -98,7 +115,7 @@ class PDFRenamerGUI:
 
     def _create_format_config(self):
         """Create filename format configuration components"""
-        format_frame = ttk.Frame(self.main_frame)
+        format_frame = ttk.Frame(self.top_frame)
         format_frame.pack(fill=tk.X, pady=5)
 
         format_label = ttk.Label(format_frame, text="Filename Format:")
@@ -110,7 +127,7 @@ class PDFRenamerGUI:
 
     def _create_options_frame(self):
         """Create options frame with checkboxes"""
-        options_frame = ttk.Frame(self.main_frame)
+        options_frame = ttk.Frame(self.top_frame)
         options_frame.pack(fill=tk.X, pady=5)
 
         # Recursive processing checkbox
@@ -142,8 +159,8 @@ class PDFRenamerGUI:
 
     def _create_progress_indicators(self):
         """Create progress indicators"""
-        progress_frame = ttk.Frame(self.main_frame)
-        progress_frame.pack(fill=tk.X, pady=5)
+        progress_frame = ttk.Frame(self.middle_frame)
+        progress_frame.pack(fill=tk.X, pady=5, side=tk.TOP)
 
         self.status_var = tk.StringVar(value="Ready")
         status_label = ttk.Label(progress_frame, textvariable=self.status_var)
@@ -154,7 +171,7 @@ class PDFRenamerGUI:
 
     def _create_log_area(self):
         """Create log display area"""
-        log_frame = ttk.LabelFrame(self.main_frame, text="Log")
+        log_frame = ttk.LabelFrame(self.middle_frame, text="Log")
         log_frame.pack(fill=tk.BOTH, expand=True, pady=5)
 
         self.log_text = scrolledtext.ScrolledText(log_frame, wrap=tk.WORD, height=10)
@@ -163,22 +180,29 @@ class PDFRenamerGUI:
 
     def _create_action_buttons(self):
         """Create action buttons"""
-        button_frame = ttk.Frame(self.main_frame)
+        # Create a separate frame at the bottom of the window for buttons
+        button_frame = ttk.Frame(self.bottom_frame)
         button_frame.pack(fill=tk.X, pady=10)
 
-        # Create more prominent buttons
+        # Add a separator above the buttons for visual clarity
+        separator = ttk.Separator(self.bottom_frame, orient='horizontal')
+        separator.pack(fill=tk.X, pady=5)
+
+        # Create more prominent buttons with fixed width
         self.start_button = ttk.Button(
             button_frame,
             text="Start Renaming",
             command=self.start_renaming,
-            style="Action.TButton"
+            style="Action.TButton",
+            width=20  # Fixed width for better visibility
         )
         self.start_button.pack(side=tk.RIGHT, padx=10, pady=5)
 
         clear_button = ttk.Button(
             button_frame,
             text="Clear Log",
-            command=self.clear_log
+            command=self.clear_log,
+            width=15  # Fixed width for better visibility
         )
         clear_button.pack(side=tk.RIGHT, padx=10, pady=5)
 
